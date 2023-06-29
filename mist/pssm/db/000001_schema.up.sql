@@ -1,0 +1,1 @@
+CREATE SCHEMA passmexample AUTHORIZATION erp;

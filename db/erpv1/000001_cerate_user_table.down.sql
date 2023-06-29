@@ -1,0 +1,9 @@
+DROP INDEX IF EXISTS erpv1.idx_erpv1_users_deleted_at;
+DROP INDEX IF EXISTS erpv1.idx_erpv1_emails_deleted_at;
+DROP INDEX IF EXISTS erpv1.idx_erpv1_auths_deleted_at;
+DROP TABLE IF EXISTS erpv1.emails;
+DROP TABLE IF EXISTS erpv1.auths;
+DROP TABLE IF EXISTS erpv1.users;
+DROP SEQUENCE IF EXISTS erpv1.emails_id_seq;
+DROP SEQUENCE IF EXISTS erpv1.auths_id_seq;
+DROP SCHEMA IF EXISTS erpv1;
