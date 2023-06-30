@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS passmexample."commodity"
     created_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
     deleted_at timestamp with time zone,
-    CONSTRAINT user_pkey PRIMARY KEY (id),
+    PRIMARY KEY (id),
     CONSTRAINT name UNIQUE (name)
 );
 

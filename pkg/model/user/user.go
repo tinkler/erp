@@ -19,6 +19,7 @@ type User struct {
 	PhoneNumber string   `gorm:"type:varchar(20);"`
 	Emails      []*Email `gorm:"foreignKey:UserID"`
 	Auth        *Auth    `gorm:"foreignKey:UserID"`
+	Roles       []string `gorm:"-"`
 }
 
 func (User) TableName() string {

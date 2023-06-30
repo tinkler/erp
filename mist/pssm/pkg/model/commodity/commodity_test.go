@@ -15,6 +15,15 @@ func assertErr(t *testing.T, err error, target error) {
 	}
 }
 
+func testDoubleCreate(t *testing.T, m *Commodity) {
+	m.ID = ""
+	err := m.Create(test.Context())
+	if err != nil {
+		t.Fatal(err)
+	}
+	// TODO check if commodity is created twice
+}
+
 func TestCreate(t *testing.T) {
 	test.LoadEnv()
 	ctx := test.Context()
@@ -26,7 +35,7 @@ func TestCreate(t *testing.T) {
 	err = m.Create(ctx)
 	assertErr(t, status.NewCn(http.StatusBadRequest, "Name is empty", "新增商品名称为空"), err)
 	// name
-	m.Name = "test"
+	m.Name = "家家面"
 	err = m.Create(ctx)
 	assertErr(t, status.NewCn(http.StatusBadRequest, "Barcode is empty", "新增商品二维码为空"), err)
 	m.Barcode = "695231203999"
@@ -41,4 +50,5 @@ func TestCreate(t *testing.T) {
 	if m.ID == "" {
 		t.Fatal("Commodity failed to create")
 	}
+	testDoubleCreate(t, m)
 }

@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/tinkler/erp/mist/pssm"
+	"github.com/tinkler/mqttadmin/pkg/db"
 	"github.com/tinkler/mqttadmin/pkg/status"
 	"gorm.io/gorm"
 )
@@ -42,7 +42,7 @@ func (m *Commodity) Create(ctx context.Context) error {
 	if len(m.Category) == 0 {
 		return status.NewCn(http.StatusBadRequest, "Category is empty", "新增商品类别为空")
 	}
-	if err := pssm.DB(ctx).Create(m).Error; err != nil {
+	if err := db.GetDB(ctx).Create(m).Error; err != nil {
 		return status.StatusInternalServer(err)
 	}
 

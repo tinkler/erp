@@ -5,21 +5,17 @@ import (
 	"net/http"
 
 	"github.com/tinkler/mqttadmin/pkg/db"
+	"github.com/tinkler/mqttadmin/pkg/status"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
 )
-
-const (
-	dbKey keyString = "db"
-)
-
-type keyString string
 
 func WrapSchemaToDB() func(next http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			schemaName := w.Header().Get("x-erp-as")
 			if schemaName == "" {
+				status.HttpError(w, status.StatusBadGateway("x-erp-as illegal"))
 				w.WriteHeader(http.StatusBadGateway)
 				return
 			}
@@ -30,14 +26,14 @@ func WrapSchemaToDB() func(next http.Handler) http.Handler {
 }
 
 func DB(ctx context.Context) *gorm.DB {
-	return ctx.Value(dbKey).(*gorm.DB)
+	return db.GetDB(ctx)
 }
 
 func WithSchemaToDB(schemaName string, ctx context.Context) context.Context {
-	db := db.DB().WithContext(ctx)
-	db.Config.NamingStrategy = schema.NamingStrategy{
+	dbInst := db.DB().WithContext(ctx)
+	dbInst.Config.NamingStrategy = schema.NamingStrategy{
 		TablePrefix:   schemaName + ".",
 		SingularTable: true,
 	}
-	return context.WithValue(ctx, dbKey, db)
+	return db.WithValue(ctx, dbInst)
 }
