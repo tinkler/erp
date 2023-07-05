@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"flag"
 	"fmt"
 	"io/ioutil"
@@ -35,6 +36,17 @@ func main() {
 	}
 
 	schema, err := copyAndReplaceFiles("./db")
+	if err != nil {
+		panic(err)
+	}
+
+	db, err := sql.Open("postgres", os.Getenv("MIGRATE_DSN"))
+	if err != nil {
+		panic(err)
+	}
+	defer db.Close()
+
+	_, err = db.Exec("CREATE SCHEMA IF NOT EXISTS " + schema + " AUTHORIZATION erp;")
 	if err != nil {
 		panic(err)
 	}
